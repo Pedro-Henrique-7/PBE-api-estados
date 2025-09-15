@@ -28,4 +28,4 @@ app.use((request,response,next)=>{
     next()
 })
 
-app.get('/')
+app.get('/v1/api-estados/estados')
