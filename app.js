@@ -12,6 +12,11 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+
+//import do arquivo de funções
+const dados = require('./modulo/funtions.js')
+
+
 //deifine a porta padrão da api, se for servidor de nuvem nao temos acesso a porta
     //EM EXECUÇÃO LOCAL PODEMOS DEFINIR A PORTA
 const PORT  = process.PORT || 8080
@@ -19,14 +24,61 @@ const PORT  = process.PORT || 8080
 //instancia da classe express
 const app = express()
 
-//
+//config cors
 app.use((request,response,next)=>{
-    response.header('Acess-Control-Allow-Origin', '0.0.0.0')
-    response.header('Acess-Control-Allow-Methods', 'GET')
+    response.header('Acess-Control-Allow-Origin', '*') // Ip de Origem
+    response.header('Acess-Control-Allow-Methods', 'GET') //  Metodos Http
 
     app.use(cors())
-    next()
+    next() //Ler os proximos end points 
 })
 
-app.get('/v1/api-estados/estados', function(request, response){
+//request recebe parametros para serem usados
+// response envia os dados na API
+
+//endpoints
+
+//listar estado
+app.get('/v1/estados', function(request, response){
+  let estados = dados.getAllEstados()
+
+  response.status(estados.statuscode) 
+  response.json(estados) 
+
+})
+
+
+
+//endpoint para buscar estado pela sigla 
+app.get('/v1/estado/:uf', function(request, response){
+    let sigla = request.params.uf
+    let estado = dados.getEstadoBySigla(sigla)
+
+    response.status(estado.statuscode)
+    response.json(estado)
+
+})
+
+
+// endpoint que busca capital pela sigla
+app.get('/v1/estadoCapital/:uf', function(request, response){
+    let sigla = request.params.uf
+    let estado = dados.getCapitalBySigla(sigla)
+
+    response.status(estado.statuscode)
+    response.json(estado)
+
+})
+
+
+app.get('/v1/regiao', function(request, response){
+    let regiaoEstados = request.query.regiao
+    let sigla = request.query.uf
+
+    console.log(sigla)
+    console.log(regiaoEstados)
+})
+
+app.listen(PORT, function(){
+    console.log("Api aguardando requisições (:D)")
 })

@@ -20,11 +20,11 @@ const MESSAGE_ERRO = {
 // retorna lista de estados
 const getAllEstados = function(){
     
-    //construindo estrutura do Json que sera exibido
+    //construindo estrutura do Json que sera exibido (padrão)
     let message = {
         status: true,
         statuscode: 200,
-        develeopment: "Pedro Henrique Oliveira da Silva",
+        development: "Pedro Henrique Oliveira da Silva",
         uf: []
 
     }    
@@ -42,18 +42,54 @@ const getAllEstados = function(){
        return MESSAGE_ERRO
     else
         return message
+
     
     
 }
 
 // retorna os dados do estado pela sigla
 const getEstadoBySigla = function(sigla){
+    
 
+    uf = sigla
+
+    let message = {
+        status: true,
+        statuscode: 200,
+        development: "Pedro Henrique Oliveira da Silva",
+    }
+
+    let estado = dados.listaDeEstados.estados.find(estado => estado.sigla === uf)
+
+
+    if(estado){
+        message.uf = estado.sigla
+        message.descricao = estado.nome
+        message.capital = estado.capital
+        message.regiao = estado.regiao
+        return message
+    }else{
+        return MESSAGE_ERRO
+    }
 }
 
 // retorna os dados referentes a capital do estado pela sigla
 const getCapitalBySigla = function(sigla){
 
+    uf = sigla
+
+    let message = {
+        status: true,
+        statuscode: 200,
+        development: "Pedro Henrique Oliveira da Silva",
+    }
+
+    let estado = dados.listaDeEstados.estados.find(estado => estado.sigla === uf)
+    message.uf = estado.sigla
+    message.descricao = estado.nome
+    message.capital = estado.capital
+
+    return message
 }
 
 // retorna a lista de estados conforme a região
@@ -71,6 +107,10 @@ const getCidadesBySigla = function(sigla){
 
 }
 
+
+
 module.exports={
-    getAllEstados
+    getAllEstados,
+    getEstadoBySigla,
+    getCapitalBySigla
 }
