@@ -94,10 +94,41 @@ const getCapitalBySigla = function(sigla){
 
 // retorna a lista de estados conforme a região
 const getEstadosByRegiao = function(regiao){
+    
+    let message = {
+        status: true,
+        statuscode: 200,
+        development: "Pedro Henrique Oliveira da Silva",
+        regiao:'',
+        estados: []
+    }
+
+    dados.listaDeEstados.estados.forEach(function(estado){
+        if(estado.regiao === regiao){
+            message.regiao = estado.regiao
+            let uf = estado.sigla
+            let descricao = estado.nome
+            let estadoRegiao = {uf, descricao}
+            message.estados.push(estadoRegiao)
+        }
+    })
+        
+    
+    console.log(message)
 
 }
 // retorna os estados que são ou ja foram capitais pelo pais
 const getEstadoIsCapitalByCountry = function(pais){
+
+    let message = {
+        status: true,
+        statuscode: 200,
+        development: "Pedro Henrique Oliveira da Silva",
+        regiao:'',
+        estados: []
+    }
+    
+    
 
 }
 
@@ -107,10 +138,11 @@ const getCidadesBySigla = function(sigla){
 
 }
 
-
+('Sul')
 
 module.exports={
     getAllEstados,
     getEstadoBySigla,
-    getCapitalBySigla
+    getCapitalBySigla,
+    getEstadosByRegiao
 }
