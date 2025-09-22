@@ -70,13 +70,32 @@ app.get('/v1/estadoCapital/:uf', function(request, response){
 
 })
 
+// endpoint que busca estados por região
+app.get('/v1/estadoRegiao/:regiao', function(request, response){
+    let regiao = request.params.regiao
+    let estados = dados.getEstadosByRegiao(regiao)
 
-app.get('/v1/regiao', function(request, response){
-    let regiaoEstados = request.query.regiao
-    let sigla = request.query.uf
+    response.status(estados.statuscode)
+    response.json(estados)
 
-    console.log(sigla)
-    console.log(regiaoEstados)
+})
+
+// endpoint que busca todas os estados que ja foram capitais do Brasil
+
+app.get('/v1/capitais', function(request, response){
+    let estados = dados.getEstadoIsCapital()
+
+    response.status(estados.statuscode)
+    response.json(estados)
+})
+
+
+app.get('/v1/cidades/:uf', function(request, response){
+    let uf = request.params.uf
+    let cidades = dados.getCidadesBySigla(uf)
+
+    response.status(cidades.statuscode)
+    response.json(cidades)
 })
 
 app.listen(PORT, function(){

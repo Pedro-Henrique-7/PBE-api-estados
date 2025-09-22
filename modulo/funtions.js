@@ -67,6 +67,7 @@ const getEstadoBySigla = function(sigla){
         message.descricao = estado.nome
         message.capital = estado.capital
         message.regiao = estado.regiao
+
         return message
     }else{
         return MESSAGE_ERRO
@@ -85,11 +86,16 @@ const getCapitalBySigla = function(sigla){
     }
 
     let estado = dados.listaDeEstados.estados.find(estado => estado.sigla === uf)
-    message.uf = estado.sigla
-    message.descricao = estado.nome
-    message.capital = estado.capital
+    
+    if(estado){
+        message.uf = estado.sigla
+        message.descricao = estado.nome
+        message.capital = estado.capital
 
-    return message
+        return message
+    }else{
+        return MESSAGE_ERRO
+    }
 }
 
 // retorna a lista de estados conforme a região
@@ -103,7 +109,7 @@ const getEstadosByRegiao = function(regiao){
         estados: []
     }
 
-    dados.listaDeEstados.estados.forEach(function(estado){
+   dados.listaDeEstados.estados.forEach(function(estado){
         if(estado.regiao === regiao){
             message.regiao = estado.regiao
             let uf = estado.sigla
@@ -112,37 +118,83 @@ const getEstadosByRegiao = function(regiao){
             message.estados.push(estadoRegiao)
         }
     })
-        
-    
-    console.log(message)
+
+    if(!(message.estados.length === 0 )|| !(message.regiao === "")){
+        return message
+    }else{
+        return MESSAGE_ERRO
+    }
+
+
 
 }
 // retorna os estados que são ou ja foram capitais pelo pais
-const getEstadoIsCapitalByCountry = function(pais){
+const getEstadoIsCapital = function(){
 
     let message = {
         status: true,
         statuscode: 200,
         development: "Pedro Henrique Oliveira da Silva",
-        regiao:'',
-        estados: []
+        capitais:[]
     }
     
+    dados.listaDeEstados.estados.forEach(function(estado){
+        if(estado.capital_pais){
+            let capital_atual = estado.capital_pais.capital
+            let uf = estado.sigla
+            let descricao = estado.nome
+            let capital = estado.capital
+            let regiao = estado.regiao
+            let capital_pais_ano_inicio = estado.capital_pais.ano_inicio
+            let capital_pais_ano_termino = estado.capital_pais.ano_fim
+            let capitais = {capital_atual, uf, descricao, capital, regiao, 
+                            capital_pais_ano_inicio, capital_pais_ano_termino}
+            message.capitais.push(capitais)
+        }
+        
+    })
     
+    if(!(message.capitais.length === 0))
+        return message
+    else
+        return MESSAGE_ERRO
 
 }
 
 
 //retorna as cidades existentes em um estado, filtrando pela sigla
 const getCidadesBySigla = function(sigla){
-
+    let message = {
+        status: true,
+        statuscode: 200,
+        development: "Pedro Henrique Oliveira da Silva",
+        uf:"",
+        descricao:"",
+        quantidade_cidades:'',
+        cidades:[]
+    }
+    dados.listaDeEstados.estados.forEach(function(estado){
+        if(estado.sigla === sigla){
+            message.uf = estado.sigla
+            message.quantidade_cidades = estado.cidades.length
+            message.descricao = estado.nome
+            message.cidades.push(estado.cidades)
+        }
+    })
+    if(!(message.cidades.length === 0 )|| !(message.uf === "")){
+        return message
+    }else{
+        return MESSAGE_ERRO
+    }
 }
 
-('Sul')
+getCidadesBySigla("g")
 
 module.exports={
     getAllEstados,
     getEstadoBySigla,
     getCapitalBySigla,
-    getEstadosByRegiao
+    getEstadosByRegiao,
+    getEstadoIsCapital,
+    getCidadesBySigla
 }
